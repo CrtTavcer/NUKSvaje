@@ -1,0 +1,11 @@
+Virtualno okolje:
+    python3 -m venv .venv --> kreiranje
+    source .venv/bin/activate --> aktiviranje
+    deactivate --> ugasanje
+
+
+pip install:
+    pip install -r "requirments" --> nalozimo vse zahtevane knjiznice iz datoteke req...
+
+FastAPI:
+    uvicorn main:app --reload --host 0.0.0.0
