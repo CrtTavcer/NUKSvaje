@@ -1,0 +1,1 @@
+zaenkrat so vse datoteke kopije datotek iz laboratorijskih vaj.
