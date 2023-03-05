@@ -1,12 +1,15 @@
 from sqlalchemy import create_engine, Column
 from sqlalchemy.ext.declarative import declarative_base
 
-engine = create_engine("sqlite:///todobatabase.db")
+engine = create_engine("sqlite:///Avtodatabase.db")
 
 Base = declarative_base()
 
 
-class ToDo(Base):
-    __tablename__ = "todotable"
+class Avto(Base):
+    __tablename__ = "avtotable"
     id = Column(Integer, primary_key = True)
-    task = Column(String(50))
+    name = Column(String(50))
+    year = Column(Integer(4))
+    milage = Column(Integer(6))
+    price = Column(Integer(6))
