@@ -1,20 +1,21 @@
 from typing import Union
 from fastapi import FastAPI
+from pydantic import BaseModel
 from database import engine, Base, ToDo
 import shemas
 from sqlalchemy.orm import session
 
-base.metadata.create_all(engine)
+Base.metadata.create_all(engine)
 
 app = FastAPI()
 
 
 @app.get("/")
 def read_root():
-    return "TODO app"
+    return "TODO app" 
 
 @app.post("/add")
-def add_todo(todo: shemas.ToDO):
+def add_todo(todo: shemas.ToDo):
 
     session = Session(bind = engine, expire_on_commit = False)
     todoDB = ToDo(task = todo.task)
@@ -22,7 +23,7 @@ def add_todo(todo: shemas.ToDO):
     session.commit()
     id = todoDB.id
     session.close()
-
+    
 
     return f"created new TODO item with id{id}"
 

@@ -1,2 +1,2 @@
 fastapi[all]==0.92.0
-sqlalchemy
+sqlalchemy==2.0.4

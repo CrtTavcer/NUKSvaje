@@ -1,5 +1,5 @@
-from pydentic import BaseModel 
+from pydantic import BaseModel 
 
 class ToDo(BaseModel):
     task: str
-    
+     

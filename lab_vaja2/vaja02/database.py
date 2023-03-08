@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column
+from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 
 engine = create_engine("sqlite:///todobatabase.db")
@@ -12,3 +12,4 @@ class ToDo(Base):
     task = Column(String(50))
 
 
+ 

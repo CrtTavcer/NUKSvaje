@@ -5,7 +5,8 @@ Virtualno okolje:
 
 
 pip install:
-    pip install -r "requirments" --> nalozimo vse zahtevane knjiznice iz datoteke req...
+pip install -r "requirments" --> nalozimo vse zahtevane knjiznice iz datoteke req...
 
 FastAPI:
     uvicorn main:app --reload --host 0.0.0.0
+
