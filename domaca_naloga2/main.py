@@ -26,8 +26,8 @@ def get_car(id:int):
 
     return car.__dict__
 
-@app.get("/get/brand", tags = ["car"])
-def get_car_brand(brand: shemas.Car):
+@app.get("/get/{brand}", tags = ["car"])
+def get_car_brand(brand: str):
     """
     API call for getting cars by brand
     """ 
