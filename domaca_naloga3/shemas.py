@@ -7,9 +7,7 @@ class PosteBase(BaseModel):
     content: str
 """
 class Car(BaseModel):
-    #id: int
-    #owner_id: int
-    #date_created: str
+
     brand: str
     model: str
     year: int

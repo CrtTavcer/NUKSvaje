@@ -18,7 +18,7 @@ class Car(Base):
     year = Column(Integer())
     milage = Column(Integer())
     price = Column(Integer())
-    owner_id = Column(Integer, ForeignKey("user_table.id"))
+    #owner_id = Column(Integer, ForeignKey("user_table.id"))
     #date_created = Column(DateTime, default = dt.datetime.utcnow) 
     #date_updated = Column(DateTime, default = dt.datetime.utcnow)
     owner = relationship("User", back_populates = "Car")

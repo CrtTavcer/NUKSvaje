@@ -10,5 +10,21 @@ pip install -r "requirments" --> nalozimo vse zahtevane knjiznice iz datoteke re
 FastAPI:
     uvicorn main:app --reload --host 0.0.0.0
 
+    URL: http://localhost:8000/v2/docs
+
 run frontend:
     npm run serve
+
+    URL: http://localhost:8080/
+
+    Deluje:
+    za besedilo
+    -GET
+    -POST
+    -DELETE
+    -PUT (neki štrajka. polje posodobi v undefined.)
+
+    za slike:
+    -še nič (v backendu deluje endpoint API za nalaganje binary data v bazo
+        neznamo dobiti ven)
+

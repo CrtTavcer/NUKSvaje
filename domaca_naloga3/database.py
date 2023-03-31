@@ -34,9 +34,8 @@ class Car_img(Base):
     image = Column(LargeBinary())
 
     #poskus povezovanja tabel
-    car_id = Column(Integer, ForeignKey("car_table.id"))
-
-
+    #car_id = Column(Integer, ForeignKey("car_table.id"))
+"""
 class User(Base):
     __tablename__ = "user_table"
     id = Column(Integer, primary_key = True)
@@ -45,5 +44,5 @@ class User(Base):
     surname = Column(String(50))
     #katere objave mima user
     #posts = relationship("Car", back_populates = "owner")
- 
+"""
     
