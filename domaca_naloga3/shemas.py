@@ -7,12 +7,12 @@ class PosteBase(BaseModel):
     content: str
 """
 class Car(BaseModel):
-
     brand: str
     model: str
     year: int
     milage: int
     price: int 
+    image: Optional[bytes]
     
 
 class Car_img_sch(BaseModel):

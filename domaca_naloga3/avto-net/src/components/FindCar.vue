@@ -1,8 +1,8 @@
 <template>
     <div>
-        <input class="id-input" type="text" v-model = "carId" placeholder="Enter car image ID to display" />
-        <button @click="getCars()">Get Car Image</button>
-        <div id="image-container"></div>
+        <input class="id-input" type="text" v-model="carId" placeholder="Enter car image ID to display" />
+        <button @click="getCarImageFromID()">Get Car Image</button>
+        <img id="image-container" src="" />
     </div>
 </template>
 
@@ -26,25 +26,23 @@ export default {
         };
     },
     mounted() {
-        this.getCars();
+        this.getCarImageFromID();
     },
     methods: {
-        getCars() {
-            //id = 3;
+        getCarImageFromID() {
             const imageContainer = document.getElementById("image-container");
             imageContainer.innerHTML = ""; // Clear the image container
             const apiUrl = `http://localhost:8000/v2/get/img/${this.carId}`; // replace this with your own API endpoint to retrieve the binary image data
 
             fetch(apiUrl)
-                .then((response) => response.blob()) // retrieve the binary image data as a Blob object
-                .then((blob) => {
-                    const imageUrl = URL.createObjectURL(blob); // create a URL for the Blob object
-                    const img = document.createElement("img");
-                    img.src = imageUrl;
-                    img.alt = "Image does";
-                    imageContainer.appendChild(img);
+                .then((response) => response.json())
+                .then((data) => {
+                    // decode and display the image data
+                    const imageData = data.image_data;
+                    const imageSrc = `data:image/jpeg;base64,${imageData}`;
+                    document.getElementById("image-container").src = imageSrc;
                 })
-                .catch((error) => console.log(error));
+                .catch((error) => console.error(error));
         },
     },
 };
@@ -58,6 +56,7 @@ export default {
     align-items: center;
     width: 100%;
     height: 100%;
+    max-width: 400px;
     background-color: #f5f5f5;
 }
 

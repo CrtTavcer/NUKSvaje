@@ -1,26 +1,35 @@
 <template>
+    <div class="name">
+        <h1>Avto-net</h1>
+    </div>
+    
     <div class="container">
         <form>
             <h2>{{ formTitle }}</h2>
             <div>
                 <label for="brand">Brand:</label>
-                <input type="text" id="brand" v-model="newCar.brand" />
+                <input type="text" id="brand" v-model="newCar.brand" placeholder="Brand name" />
             </div>
             <div>
                 <label for="model">Model:</label>
-                <input type="text" id="model" v-model="newCar.model" />
+                <input type="text" id="model" v-model="newCar.model" placeholder="Car model" />
             </div>
             <div>
                 <label for="year">Year:</label>
-                <input type="number" id="year" v-model.number="newCar.year" />
+                <input type="number" id="year" min="1900" max="2023" v-model.number="newCar.year" />
             </div>
             <div>
                 <label for="milage">Mileage:</label>
-                <input type="number" id="milage" v-model.number="newCar.milage" />
+                <input type="number" id="milage" min="0" max="1000000" v-model.number="newCar.milage" />
             </div>
             <div>
                 <label for="price">Price:</label>
                 <input type="number" id="price" v-model.number="newCar.price" />
+            </div>
+            <div>
+                <label for="price">Image:</label>
+                <input type="file" id="image-input" @change="imageChanged" />
+                <img id="image-preview" />
             </div>
             <button type="submit" @click.prevent="submitForm">{{ submitButtonText }}</button>
         </form>
@@ -33,7 +42,7 @@
                     <th>Mileage</th>
                     <th>Price</th>
                     <th>Action</th>
-                    
+                    <th>Image</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,30 +52,28 @@
                     <td>{{ car.year }}</td>
                     <td>{{ car.milage }}</td>
                     <td>{{ car.price }}</td>
-                     
                     <td>
                         <button @click="editCar(car)">Edit</button>
                         <button @click="deleteCar(car.id)">Delete</button>
                     </td>
+                    <img class="car-image" :src="'data:image/jpeg;base64,' + car.image" alt="" />
                 </tr>
             </tbody>
         </table>
         <FindCar></FindCar>
-    
-        <AddImg></AddImg>
 
     </div>
 </template>
 
 <script>
 import FindCar from "./components/FindCar.vue";
-import AddImg from "./components/AddImg.vue";
+//import AddImg from "./components/AddImg.vue";
 
 export default {
     name: "CarInventory",
     components: {
         FindCar: FindCar,
-        AddImg: AddImg,
+        //AddImg: AddImg,
     },
     data() {
         return {
@@ -77,7 +84,7 @@ export default {
                 year: 0,
                 milage: 0,
                 price: 0,
-                //image: null,
+                image: null,
             },
             updateCarId: null,
             formTitle: "Add New Car",
@@ -97,6 +104,7 @@ export default {
             })
                 .then((response) => response.json())
                 .then((response) => {
+                    // console.log(response);
                     this.cars = response;
                 })
                 .catch((error) => {
@@ -104,6 +112,7 @@ export default {
                 });
         },
         addCar() {
+            console.log(this.newCar);
             fetch("http://localhost:8000/v2/add/car", {
                 method: "POST",
                 headers: {
@@ -159,6 +168,12 @@ export default {
             this.newCar.year = 0;
             this.newCar.milage = 0;
             this.newCar.price = 0;
+
+            // Clear image file input and image preview
+            const img = document.getElementById("image-preview");
+            img.removeAttribute("src");
+            const fileInput = document.getElementById("image-input");
+            fileInput.value = "";
         },
         deleteCar(id) {
             fetch(`http://localhost:8000/v2/delete/car/${id}`, {
@@ -174,6 +189,28 @@ export default {
                 .catch((error) => {
                     console.error(error);
                 });
+        },
+        imageChanged() {
+            const imageInput = document.getElementById("image-input");
+            const previewImage = document.getElementById("image-preview");
+
+            // Get the selected file
+            const file = imageInput.files[0];
+
+            // Create a FileReader instance to read the contents of the file
+            const reader = new FileReader();
+
+            // Set up an event listener to handle when the FileReader has finished loading the file
+            reader.addEventListener("load", () => {
+                // console.log("Image Loaded");
+
+                // Set the src attribute of the img element to the Base64-encoded string of the file contents
+                previewImage.src = reader.result;
+                this.newCar.image = reader.result.split(",")[1];
+            });
+
+            // Read the file as a data URL (which includes the Base64-encoded string)
+            reader.readAsDataURL(file);
         },
     },
 };
@@ -191,11 +228,29 @@ body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     background-color: #9e9797;
 }
+.name {
+  text-align: center;
+  
+  margin: 0 auto;
+  background-color: white;
+}
+
+
 
 .container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+}
+
+.car-image {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+#image-preview {
+    max-width: 200px;
+    max-height: 200px;
 }
 
 /* Form styles */

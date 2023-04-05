@@ -19,7 +19,10 @@ class Car(Base):
     year = Column(Integer())
     milage = Column(Integer())
     price = Column(Integer())
-    #image = Column(LargeBinary()) #kao ne obstaja?
+    image = Column(LargeBinary())
+
+
+    
     #poskus povezovanja tabel
     #images = relationship("Car_img", backref="car", cascade="all, delete-orphan")
 

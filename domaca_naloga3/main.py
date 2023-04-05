@@ -9,7 +9,8 @@ from fastapi_versioning import VersionedFastAPI, version
 from sqlalchemy import inspect, insert, update
 from typing import Optional
 
-
+from fastapi.encoders import jsonable_encoder
+import base64, json
 
 from io import BytesIO
 from PIL import Image
@@ -49,11 +50,13 @@ async def handle_options():
 async def handle_options():
     return {"Allow": "DELETE"}
 
-
-#@app.options("/update/car/{id}/{brand}/{model}/{year}/{milage}/{price}")
-@app.options("/update/car/{id}/{brand}")
+@app.options("/update/car/{id}")
 async def handle_options():
     return {"Allow": "PUT"}
+
+@app.options("/list")
+async def handle_options():
+    return {"Allow": "GET"}
 
 #----------------------------------------------------
 
@@ -136,23 +139,44 @@ def delete_car(id:int):
 
 
 
+# @app.get("/get/img/{id}", tags = ["car image"])
+# @version(2)
+# def get_car_img(id:int):
+#     """
+#     API call for getting car image
+#     """ 
+#     print("Searching for car with ID: ", id)
+
+#     # Search database
+#     session = Session(bind=engine, expire_on_commit=False)
+#     car = session.query(Car_img).filter_by(id=id).first()
+#     session.close()
+
+#     # Respond to client
+#     if not car.image:
+#         raise HTTPException(status_code = 404, detail = f"Car image with id {id} doesen't exsist")
+#     return Response(content=car.image, media_type="image/jpeg")
+
 @app.get("/get/img/{id}", tags = ["car image"])
 @version(2)
 def get_car_img(id:int):
     """
     API call for getting car image
     """ 
-    print("Searching for car with ID: ", id)
+    print("Searching for car image with ID: ", id)
 
-    # Search database
     session = Session(bind=engine, expire_on_commit=False)
-    car = session.query(Car_img).filter_by(id=id).first()
-    session.close()
 
-    # Respond to client
-    if not car.image:
-        raise HTTPException(status_code = 404, detail = f"Car image with id {id} doesen't exsist")
-    return Response(content=car.image, media_type="image/jpeg")
+    table_row = session.query(Car).filter(Car.id == id).first()
+
+    if not table_row:
+        raise HTTPException(status_code=404, detail="This car does not exist.")
+
+    return {
+        "id": table_row.id,
+        "name": table_row.brand,
+        "image_data": base64.b64encode(table_row.image).decode('utf-8')
+    }
 
 """
 @app.get("/get/all/{id}", tags = ["car image"])
@@ -258,101 +282,101 @@ def get_car_brand(brand: str):
         
     return car_brand
 """
+# @app.get("/list", tags = ["car"])
+# @version(2)
+# def get_all_cars():
+#     """
+#     API call for getting all cars
+#     """ 
+#     print("Test")
+#     session = Session(bind=engine, expire_on_commit=False)
+#     cars = session.query(Car).all()
+#     session.close()
+
+#     if not cars:
+#         raise HTTPException(status_code = 404, detail = f"car list doesen't exsist")
+
+#     return [car.__dict__ for car in cars]   
+
 @app.get("/list", tags = ["car"])
 @version(2)
 def get_all_cars():
-    """
-    API call for getting all cars
-    """ 
-    print("Test")
     session = Session(bind=engine, expire_on_commit=False)
     cars = session.query(Car).all()
-    session.close()
 
+    # Iterate in for loop thourg every object in cars
+    for car in cars:
+        car.image = base64.b64encode(car.image).decode('utf-8')
+    session.close()
     if not cars:
         raise HTTPException(status_code = 404, detail = f"car list doesen't exsist")
+    
+    return jsonable_encoder(cars)
 
-    return [car.__dict__ for car in cars]   
       
-@app.options("/list", tags = ["car"])
-@version(2)
-def get_all_cars():
-    """
-    API call for getting all cars
-    """ 
-    print("OPTIONS")
-    session = Session(bind=engine, expire_on_commit=False)
-    cars = session.query(Car).all()
-    session.close()
+# @app.options("/list", tags = ["car"])
+# @version(2)
+# def get_all_cars():
+#     """
+#     API call for getting all cars
+#     """ 
+#     print("OPTIONS")
+#     session = Session(bind=engine, expire_on_commit=False)
+#     cars = session.query(Car).all()
+#     session.close()
 
-    if not cars:
-        raise HTTPException(status_code = 404, detail = f"car list doesen't exsist")
+#     if not cars:
+#         raise HTTPException(status_code = 404, detail = f"car list doesen't exsist")
 
-    return [car.__dict__ for car in cars]     
+#     return [car.__dict__ for car in cars]     
+
+# @app.post("/add/car", tags = ["car"], status_code = status.HTTP_201_CREATED)
+# @version(2)
+# def add_car(car: shemas.Car):
+
+#     #API call for posting new car
+
+#     session = Session(bind = engine, expire_on_commit = False)
+    
+#     avtoDB = Car(brand = car.brand, model = car.model,
+#     year= car.year, milage = car.milage, price = car.price)
+    
+
+#     session.add(avtoDB)
+#     session.commit()
+#     id = avtoDB.id
+#     brand = avtoDB.brand
+#     session.close()
+
+#     return f"created new car {brand} with id {id}"
+
 
 @app.post("/add/car", tags = ["car"], status_code = status.HTTP_201_CREATED)
 @version(2)
 def add_car(car: shemas.Car):
-
     #API call for posting new car
-
     session = Session(bind = engine, expire_on_commit = False)
     
     avtoDB = Car(brand = car.brand, model = car.model,
-    year= car.year, milage = car.milage, price = car.price)
+                year= car.year, milage = car.milage, price = car.price, image = base64.b64decode(car.image))
     
-
     session.add(avtoDB)
     session.commit()
+
     id = avtoDB.id
     brand = avtoDB.brand
+    
     session.close()
 
     return f"created new car {brand} with id {id}"
+
+
+
 """
-
-
-@app.post("/add/car", tags = ["car"], status_code = status.HTTP_201_CREATED)
-@version(2)
-def add_car(car: shemas.Car, image: UploadFile = File(...)):
-    
-    #API call for posting new car
-    
-    session = Session(bind = engine, expire_on_commit = False)
-    
-    #avtoDB = Car(brand = car.brand, model = car.model,
-    #year= car.year, milage = car.milage, price = car.price)
-    
-    session.execute(
-     insert(Car),
-     [
-         {  "brand": car.brand,
-            "model": car.model,
-            "year": car.year,
-            "milage": car.milage,
-            "price": car.price,
-            "image": binary_data
-            },
-     ],
-     )
-
-    #session.add(avtoDB)
-    session.commit()
-    id = avtoDB.id
-    brand = avtoDB.brand
-    session.close()
-
-    return f"created new car {brand} with id {id}"
-"""
-
-
-
 @app.post("/add/user", tags = ["user"], status_code = status.HTTP_201_CREATED)
 @version(2)
 def add_user(user: shemas.User):
-    """
-    API call for creating new user
-    """ 
+
     session = Session(bind = engine, expire_on_commit = False)
     userDB = User(name = user.name, surname = user.surname, email = user.email )
 
@@ -362,9 +386,8 @@ def add_user(user: shemas.User):
     session.close()
 
     return f"created new user with id{id}"
-
-#@app.put("/update/car/{id}/{brand}/{model}/{year}/{milage}/{price}", tags = ["car"])
-@app.put("/update/car/{id}/{brand}", tags = ["car"])
+"""
+@app.put("/update/car/{id}/", tags = ["car"])
 @version(2)
 def update_car(id: int, brand: Optional[str] = None, model: Optional[str] = None, year: Optional[int] = None, milage: Optional[int] = None, price: Optional[int] = None):
     """
@@ -374,6 +397,8 @@ def update_car(id: int, brand: Optional[str] = None, model: Optional[str] = None
     car_db = session.query(Car).get(id)
 
     if car_db:
+        print(f"Received request payload: {brand}, {model}, {year}, {milage}, {price}")
+
         if brand is not None:
             car_db.brand = brand
         if model is not None:
@@ -386,11 +411,13 @@ def update_car(id: int, brand: Optional[str] = None, model: Optional[str] = None
             car_db.price = price
         session.commit()
     session.close()
-    
+
     if not car_db:
         raise HTTPException(status_code=404, detail=f"Car item with id {id} doesn't exist")
         return car_dbception(status_code = 404, detail = f"car item with id {id} doesen't exsist")
     return car_db
+
+
 
 @app.delete("/delete/car/{id}", tags = ["car"])
 @version(2)
