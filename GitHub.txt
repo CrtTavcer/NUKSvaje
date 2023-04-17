@@ -1,0 +1,18 @@
+Navodila za git push
+------------------------------------------------------------------------
+ustvariš datoteko
+git init --> new repository
+git status --> trekanje sprememb
+git add . --> dodajanje vseh datoteko
+git commit -am "blablabal" --> nalaganje na git in opis
+-------------------------------------------------------------------------
+za nalaganje na Github:
+1. ustvariš repozitori na GIT-hubu
+2. git remote add origin 'link od repozitorija'
+3. git push origin main/master/karkoli
+--------------------------------------------------------------------------
+nove spremembe ponovi vajo:
+git add
+git commit -am
+git push origin 
+vneseš geslo

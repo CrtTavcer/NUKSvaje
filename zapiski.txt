@@ -9,6 +9,7 @@ pip install -r "requirments" --> nalozimo vse zahtevane knjiznice iz datoteke re
 
 FastAPI:
     uvicorn main:app --reload --host 0.0.0.0
+    
 
     URL: http://localhost:8000/v2/docs
 

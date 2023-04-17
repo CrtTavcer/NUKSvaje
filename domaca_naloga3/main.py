@@ -431,7 +431,7 @@ def delete_car(id:int):
     session.commit()
     session.close()
     return "Car with id {id} deleted"
-
+"""
 @app.delete("/delete/user/{id}", tags = ["user"])
 @version(2)
 def delete_user(id:int):
@@ -443,7 +443,7 @@ def delete_user(id:int):
     session.commit()
     session.close()
     return "User deleted"
-
+"""
 #------------------------------V1--------------------------------------------
 
 @app.get("/")
@@ -508,12 +508,12 @@ def add_car(car: shemas.Car):
 
     return f"created new car {brand} with id {id}"
 
-@app.post("/add/user", tags = ["user"])
+""" @app.post("/add/user", tags = ["user"])
 @version(1)
 def add_user(user: shemas.User):
-    """
-    API call for creating new user
-    """ 
+"""
+#API call for creating new user
+""" 
     session = Session(bind = engine, expire_on_commit = False)
     userDB = User(name = user.name, surname = user.surname, email = user.email )
 
@@ -522,7 +522,7 @@ def add_user(user: shemas.User):
     id = userDB.id
     session.close()
 
-    return f"created new user with id{id}"
+    return f"created new user with id{id}" """
 
 
 
@@ -540,7 +540,7 @@ def delete_car(id:int):
     session.close()
     return "Car with id {id} deleted"
 
-@app.delete("/delete/user/{id}", tags = ["user"])
+""" @app.delete("/delete/user/{id}", tags = ["user"])
 @version(1)
 def delete_user(id:int):
     session = Session(bind=engine, expire_on_commit=False)
@@ -550,7 +550,7 @@ def delete_user(id:int):
     session.delete(user_db)
     session.commit()
     session.close()
-    return "User deleted"
+    return "User deleted" """
 
 
 
