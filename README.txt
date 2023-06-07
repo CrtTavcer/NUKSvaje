@@ -22,7 +22,7 @@ sudo docker kill PID                                #ubijanje kont.
 sudo docker run
 sudo systemctl status docker                        #status dockerja
 
-docker build -t "ime taga" .                        #naredi image (. išči dockerfile v trenutnem direktorjiju)
+docker build -t "username(priporocljivo za dockerhub)/ime slike" .                        #naredi image (. išči dockerfile v trenutnem direktorjiju)
 docker run -dp hostport:contport "ime tega" 	    #zaženi image in mapiraj porte
 sudo docker image rm 19fef28777d4                   #delete image
 
