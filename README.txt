@@ -42,3 +42,8 @@ Zagon frontenda docker image:
     1) docker build -t vue_image .
     2) sudo docker run -dp 5000:8080 vue_image     #8080 default vue.js port!
     3)obiščemo localhost:5000 oz. 212.101.137.121:5000
+
+############################ DOCKER COMPOSE ########################
+    1) cd NUKSvaje/domaca_naloga5
+    2)sudo docker compose up
+    3) obiščemo http://212.101.137.121:5000/

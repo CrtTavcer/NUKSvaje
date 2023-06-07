@@ -1,0 +1,12 @@
+#version: '3'
+services:
+  back:
+    image: fastapi_image
+    ports:
+      - '8000:8000'
+
+  front:
+    image: vue_image
+    ports: 
+      - '5000:8080'  
+
