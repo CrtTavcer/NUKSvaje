@@ -18,6 +18,8 @@ from PIL import Image
 from starlette.responses import RedirectResponse
 
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Request, Response
+
 
 Base.metadata.create_all(engine)
 
@@ -25,8 +27,9 @@ app = FastAPI()
 
 origins = [
     "http://localhost",
-    "http://0.0.0.0:8081",
-    "http://localhost:8081",
+    "http://212.101.137.121:8000",
+    "http://212.101.137.121:5000",
+    "http://212.101.137.121:8080",
     "*"
 ]
 
@@ -37,6 +40,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.middleware("http")
+async def add_cors_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["Access-Control-Allow-Origin"] = origins  # Replace with your Vue.js app's domain
+    response.headers["Access-Control-Allow-Headers"] = "*"
+    return response
+
+
+
+
 #--------------------options-------------------------------
 @app.options("/add/car")
 async def handle_options():

@@ -1,4 +1,4 @@
-#version: '3'
+version: '3'
 services:
   back:
     image: fastapi_image
@@ -8,5 +8,4 @@ services:
   front:
     image: vue_image
     ports: 
-      - '5000:8080'  
-
+      - '5000:8080'

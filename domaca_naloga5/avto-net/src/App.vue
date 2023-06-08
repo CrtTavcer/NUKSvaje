@@ -96,7 +96,7 @@ export default {
     },
     methods: {
         getCars() {
-            fetch("http://localhost:8000/v2/list", {
+            fetch("http://212.101.137.121:8000/v2/list", {
                 method: "GET",
                 headers: {
                     Accept: "application/json",
@@ -113,7 +113,7 @@ export default {
         },
         addCar() {
             console.log(this.newCar);
-            fetch("http://localhost:8000/v2/add/car", {
+            fetch("http://212.101.137.121:8000/v2/add/car", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -130,7 +130,7 @@ export default {
                 });
         },
         updateCar(id, brand) {
-            fetch(`http://localhost:8000/v2/update/car/${id}/${brand}`, {
+            fetch(`http://212.101.137.121:8000/v2/update/car/${id}/${brand}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -176,7 +176,7 @@ export default {
             fileInput.value = "";
         },
         deleteCar(id) {
-            fetch(`http://localhost:8000/v2/delete/car/${id}`, {
+            fetch(`http://212.101.137.121:8000/v2/delete/car/${id}`, {
                 method: "DELETE",
                 headers: {
                     Accept: "application/json",

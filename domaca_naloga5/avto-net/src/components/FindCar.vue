@@ -32,7 +32,7 @@ export default {
         getCarImageFromID() {
             const imageContainer = document.getElementById("image-container");
             imageContainer.innerHTML = ""; // Clear the image container
-            const apiUrl = `http://localhost:8000/v2/get/img/${this.carId}`; // replace this with your own API endpoint to retrieve the binary image data
+            const apiUrl = `http://212.101.137.121:8000/v2/get/img/${this.carId}`; // replace this with your own API endpoint to retrieve the binary image data
 
             fetch(apiUrl)
                 .then((response) => response.json())
